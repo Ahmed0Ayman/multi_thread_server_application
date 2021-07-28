@@ -8,7 +8,7 @@
 
 void ERROR_FUN(void)
 {
-    printf("free table before exist \n");
+    printf("free table before exit \n");
     HashTable_Free(Table);
 }
 
@@ -37,7 +37,7 @@ void * handle_client_1(void * arg)
                 bzero(Message, sizeof(Message));
                 recv(clients[key].clientFD,Message,sizeof(Message),0);
                 Remove_Carriage_And_Line_Feed(Message);
-                if(!strcmp(Message,"exist")) break;
+                if(!strcmp(Message,"exit")) break;
                 Add_Line_Feed(Message);
                 send(clients[key_Cliect].clientFD,Message,strlen(Message),0);
 
@@ -73,7 +73,7 @@ void * handle_client_2(void * arg)
                 bzero(Message, sizeof(Message));
                 recv(clients[key_Cliect].clientFD,Message,sizeof(Message),0);
                 Remove_Carriage_And_Line_Feed(Message);
-                if(!strcmp(Message,"exist")) break;
+                if(!strcmp(Message,"exit")) break;
                 Add_Line_Feed(Message);
                 send(clients[key].clientFD,Message,strlen(Message),0);
 
@@ -104,13 +104,13 @@ void * handle_client(void * arg)
         bzero(Message, sizeof(Message));
     while (1)
     {
-        strcpy(Message,"please send client Name you want to communicate with or type exist\n");
+        strcpy(Message,"please send client Name you want to communicate with or type exit\n");
         send(clients[key].clientFD,Message,strlen(Message),0);
 
         bzero(Message, sizeof(Message));
         recv(clients[key].clientFD,Message,sizeof(Message),0);
         Remove_Carriage_And_Line_Feed(Message);
-        if(!strcmp(Message,"exist"))    
+        if(!strcmp(Message,"exit"))    
         {
             printf("ok \n");
             break ;
@@ -123,7 +123,7 @@ void * handle_client(void * arg)
         if((NULL == HashTable_ItemSearch(Table,Message,(uint32_t *)&key_Cliect))||(key != CHECK_KEY )) 
         {
             bzero(Message, sizeof(Message));
-            strcpy(Message,"Not exist \n");
+            strcpy(Message,"Not exit \n");
             send(clients[key].clientFD,Message,strlen(Message),0);
         } else {
                 bzero(Message, sizeof(Message));
@@ -163,15 +163,15 @@ void * handle_client(void * arg)
 
 
 
- /* this handler used to free all allocated memory before exit the application and print exist message  */
+ /* this handler used to free all allocated memory before exit the application and print exit message  */
 void * Handle_EXIT(void * arg)
 {
     char Mess[10];
-    printf("the Handle_EXIT is running at any time enter exist to leave \n");
+    printf("the Handle_EXIT is running at any time enter exit to leave \n");
     while(1)
     {
         scanf("%s",Mess);
-        if(!strcmp(Mess,"exist"))
+        if(!strcmp(Mess,"exit"))
         exit(0);
     }
 
@@ -216,7 +216,7 @@ int main(int argc ,char * argv[])
     /* maximun number of clients will equal to the hashtable length */
     if(listen(server_socketID,HashTableLen) == -1) exit(-1);
 
-    /* create exist thread */
+    /* create exit thread */
     if(pthread_create(&tid, NULL, &Handle_EXIT, (void*)Key)  == -1) exit(-1);
    
 
